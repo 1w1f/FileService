@@ -9,7 +9,7 @@ public class FileModel
     public int UserId { get; set; }
     public DateTime CreateTime { get; set; }
     public bool IsDelete { get; set; }
-    public UserModel User { get; set; }
+    public UserDto User { get; set; }
     public string SavaPath { get; set; }
 
     /// <summary>文件大小单位为字节</summary>

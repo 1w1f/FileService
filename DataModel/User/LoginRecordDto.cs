@@ -1,6 +1,6 @@
 using System.Net;
 namespace DataModel.User;
-public class LoginRecord
+public class LoginRecordDto
 {
     public int LoginRecordId { get; set; }
     public int UserId { get; set; }

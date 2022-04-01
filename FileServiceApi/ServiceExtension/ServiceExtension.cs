@@ -1,4 +1,5 @@
 using System.Configuration;
+using FileService.AutoMapper.Profiles;
 using FileService.Service.IService;
 using FileServiceApi.Service.Service;
 using FileServiceRepsitory.IRepository;
@@ -15,6 +16,14 @@ namespace FileServiceApi.ServiceExtension
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IUserRepository, UserModelRepository>();
  
+
+
+            #region AutoMapperDI
+            serviceCollection.AddAutoMapper(typeof(UserProfile));
+            #endregion
+            #region IPMiddleware
+                
+            #endregion
         }
     }
 }

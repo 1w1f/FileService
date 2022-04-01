@@ -10,6 +10,7 @@ packages/
 
 #vscode
 .vscode/
+.vs
 
 
 # User-specific files  

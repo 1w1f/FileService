@@ -1,7 +1,16 @@
+using System;
+using System.Net;
+using AutoMapper;
 using DataModel;
 using DataModel.User;
+using DataModel.User.Vo;
+using FileService.Common;
+using FileService.Common.Utilities;
 using FileService.Service.IService;
+using FileServiceApi.Common;
+using FileServiceApi.Filter;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace FileServiceApi.Controllers
 {
@@ -10,35 +19,57 @@ namespace FileServiceApi.Controllers
     public class UserController : ControllerBase
     {
         protected IUserService UserService { get; set; }
+        protected IMapper Mapper { get; set; }
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IMapper mapper)
         {
             UserService = userService;
+            Mapper = mapper;
         }
-
+        /// <summary>
+        /// 创建用户 
+        /// </summary>
+        /// <param name="vo">uservo</param>
+        /// <returns></returns>
         [HttpPost("Create")]
-        public async Task<ActionResult<bool>> CreateUser([FromBody] UserModel userModel)
+        [ResultFilter]
+        // [ApiResultFilterAttribute]
+        public async Task<UserDto> CreateUser([FromBody] UserVo vo)
         {
-            var result = await UserService.Create(userModel);
+            
+            throw new ArgumentException(@"系统异常测试");
+            // throw new ApiException(451,"异常接口返回测试");
+            return new UserDto();
+            if (string.IsNullOrEmpty(vo.Name) || string.IsNullOrEmpty(vo.PassWord))
+            {
+                
+            }
+            var user = Mapper.Map<UserVo, UserDto>(vo);
+            user.CreateTime = new DateTime();
+            var result = await UserService.Create(user);
             if (result != null)
             {
-                return true;
+                return result;
             }
             else
             {
-                return false;
+                return null;
             }
         }
 
+
+        /// <summary>
+        /// 获取所有User
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<List<UserModel>>> FindUserIncludeLoginRecords()
+        public async Task<ActionResult<List<UserDto>>> FindUserIncludeLoginRecords()
         {
             return await UserService.FindAllAsync();
         }
 
 
 
-
-
+        // public async Task<Action<UserD>>
     }
 }

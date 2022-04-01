@@ -6,14 +6,14 @@ using FileServiceRepsitory.IRepository;
 
 namespace FileServiceApi.Service.Service
 {
-    public class UserService : BaseService<UserModel>, IUserService
+    public class UserService : BaseService<UserDto>, IUserService
     {
         public UserService(IUserRepository userRepository) : base(userRepository)
         {
         }
-        public override async Task<List<UserModel>> FindAllAsync()
+        public override async Task<List<UserDto>> FindAllAsync()
         {
-            return await BaseRepository.FindAllAsync(new UserModel());
+            return await BaseRepository.FindAllAsync(new UserDto());
         }
     }
 }

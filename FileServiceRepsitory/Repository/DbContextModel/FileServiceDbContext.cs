@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 namespace FileServiceRepsitory.Repository.DbContextModel;
 public class FileServiceDbContext : DbContext
 {
-    public DbSet<UserModel> Users { get; set; }
-    public DbSet<LoginRecord> LoginRecords{get;set;}
+    public DbSet<UserDto> Users { get; set; }
+    public DbSet<LoginRecordDto> LoginRecords{get;set;}
     
     public FileServiceDbContext(DbContextOptions option) : base(option)
     {
@@ -20,8 +20,8 @@ public class FileServiceDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<UserModel>().HasKey(u=>u.Id);
-        modelBuilder.Entity<UserModel>(user =>
+        modelBuilder.Entity<UserDto>().HasKey(u=>u.Id);
+        modelBuilder.Entity<UserDto>(user =>
         {
 
             user.Property(u => u.Id).HasColumnName("UserId").IsRequired();
@@ -30,14 +30,15 @@ public class FileServiceDbContext : DbContext
             user.HasKey(u => u.Id);
             user.ToTable("Users");
         });
-        modelBuilder.Entity<LoginRecord>(loginRecord=>{
+        modelBuilder.Entity<LoginRecordDto>().HasKey(u=>u.LoginRecordId);
+        modelBuilder.Entity<LoginRecordDto>(loginRecord=>{
             loginRecord.Property(r=>r.LoginRecordId).HasColumnName("LoginRecordId").HasColumnType("int").IsRequired();
             loginRecord.Property(r=>r.LoginTime).HasColumnName("LoginTime").HasColumnType("nvarchar(15)").HasMaxLength(15);
             loginRecord.Property(r=>r.LoginIp).HasColumnName("LoginIp").HasColumnType("nvarchar(20)");
             loginRecord.Property(r=>r.UserId).HasColumnName("UserId").HasColumnType("int");
         });
         #region 一对多
-            modelBuilder.Entity<UserModel>().HasMany(u=>u.LoginRecords).WithOne().HasForeignKey(r=>r.UserId);
+            modelBuilder.Entity<UserDto>().HasMany(u=>u.LoginRecords).WithOne().HasForeignKey(r=>r.UserId);
         #endregion
     }
 }
