@@ -34,27 +34,27 @@ namespace FileServiceApi.Controllers
         [HttpPost("Create")]
         [ResultFilter]
         // [ApiResultFilterAttribute]
-        public async Task<UserDto> CreateUser([FromBody] UserVo vo)
+        public async Task<ActionResult<UserDto>> CreateUser([FromBody] UserVo vo)
         {
-            
-            throw new ArgumentException(@"系统异常测试");
+            return NotFound(new UserDto());
+            // throw new ArgumentException(@"系统异常测试");
             // throw new ApiException(451,"异常接口返回测试");
-            return new UserDto();
-            if (string.IsNullOrEmpty(vo.Name) || string.IsNullOrEmpty(vo.PassWord))
-            {
+            // return new UserDto();
+            // if (string.IsNullOrEmpty(vo.Name) || string.IsNullOrEmpty(vo.PassWord))
+            // {
                 
-            }
-            var user = Mapper.Map<UserVo, UserDto>(vo);
-            user.CreateTime = new DateTime();
-            var result = await UserService.Create(user);
-            if (result != null)
-            {
-                return result;
-            }
-            else
-            {
-                return null;
-            }
+            // }
+            // var user = Mapper.Map<UserVo, UserDto>(vo);
+            // user.CreateTime = new DateTime();
+            // var result = await UserService.Create(user);
+            // if (result != null)
+            // {
+            //     return result;
+            // }
+            // else
+            // {
+            //     return null;
+            // }
         }
 
 
