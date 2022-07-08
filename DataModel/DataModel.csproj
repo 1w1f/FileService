@@ -4,6 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <!-- Swagger从注释中生成相关接口文档 项目生成后见bin/xxx(项目名).xml -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- 忽略swagger中的警告 -->
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
 
 </Project>

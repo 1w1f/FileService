@@ -6,16 +6,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FileServiceRepsitory.Repository
 {
-    public class UserModelRepository:BaseRepository<UserDto,FileServiceDbContext>,IUserRepository
+    public class UserModelRepository : BaseRepository<UserDto, FileServiceDbContext>, IUserRepository
     {
         public UserModelRepository(FileServiceDbContext dbContext) : base(dbContext)
         {
         }
 
-
-        public override async Task<List<UserDto>> FindAllAsync(UserDto t)
+        /// <summary>
+        /// 无实体跟踪，优化查询
+        /// </summary>
+        /// <returns></returns>
+        public override async Task<List<UserDto>> FindAllAsync()
         {
-            return await DbContext.Users.Include(u=>u.LoginRecords).ToListAsync();
+            return await DbContext.Users.Include(u => u.LoginRecords).AsNoTracking().ToListAsync();
         }
     }
 }

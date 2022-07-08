@@ -13,9 +13,7 @@ namespace FileServiceApi.Service.Service
     {
         public FileService(IBaseRepository<FileModel> baseRepository) : base(baseRepository)
         {
-
-
-
+            
         }
         public async Task<(Stream largeFileStream, string fileName)> GetFileInfoFromRequest(HttpRequest request,MediaTypeHeaderValue mediaTypeHeader)
         {

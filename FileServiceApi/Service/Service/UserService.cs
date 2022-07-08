@@ -10,10 +10,15 @@ namespace FileServiceApi.Service.Service
     {
         public UserService(IUserRepository userRepository) : base(userRepository)
         {
+
+        }
+        public override async Task<UserDto> Create(UserDto userDto)
+        {
+            return await BaseRepository.Create(userDto);
         }
         public override async Task<List<UserDto>> FindAllAsync()
         {
-            return await BaseRepository.FindAllAsync(new UserDto());
+            return await BaseRepository.FindAllAsync();
         }
     }
 }

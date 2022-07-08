@@ -4,17 +4,17 @@ using FileServiceRepsitory.Repository;
 
 namespace FileService.Service.Service;
 
-public class BaseService<T> : IBaseService<T> where T:class,new()
+public class BaseService<T> : IBaseService<T> where T : class, new()
 {
-    protected IBaseRepository<T> BaseRepository{get;set;}
-    
+    protected IBaseRepository<T> BaseRepository { get; set; }
+
     public BaseService(IBaseRepository<T> baseRepository)
     {
-        BaseRepository=baseRepository;
+        BaseRepository = baseRepository;
     }
-    public Task<T> Create(T t)
+    public virtual Task<T> Create(T t)
     {
-       return BaseRepository.Create(t);
+        throw new NotImplementedException();
     }
 
     public Task<bool> Delete(int id)

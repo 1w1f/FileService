@@ -3,14 +3,19 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+
+		<!-- Swagger从注释中生成相关接口文档 项目生成后见bin/xxx(项目名).xml -->
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<!-- 忽略swagger中的警告 -->
+		<NoWarn>1591</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
-		<PackageReference Include="AutoMapper" Version="11.0.1"/>
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+		<PackageReference Include="AutoMapper" Version="11.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\FileServiceRepsitory\FileServiceRepsitory.csproj"/>
+		<ProjectReference Include="..\FileServiceRepsitory\FileServiceRepsitory.csproj" />
 	</ItemGroup>
 </Project>

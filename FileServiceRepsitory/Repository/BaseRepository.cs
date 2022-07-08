@@ -3,24 +3,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FileServiceRepsitory.Repository
 {
-    public class BaseRepository<T,TDbContext> :IBaseRepository<T> where T : class, new() where TDbContext: DbContext
+    public class BaseRepository<T, TDbContext> : IBaseRepository<T> where T : class, new() where TDbContext : DbContext
     {
-        protected  TDbContext DbContext{get;set;}
+        protected TDbContext DbContext { get; set; }
 
         public BaseRepository(TDbContext dbContext)
         {
-            this.DbContext=dbContext;
+            this.DbContext = dbContext;
         }
 
         public async Task<T> Create(T t)
         {
-            var result=await DbContext.AddAsync(t);
+            var result = await DbContext.AddAsync(t);
             DbContext.SaveChanges();
             return result.Entity;
         }
 
 
-        
+
 
         // public Task<bool> Delete(int id)
         // {
@@ -32,7 +32,7 @@ namespace FileServiceRepsitory.Repository
         //     throw new NotImplementedException();
         // }
 
-        public async virtual Task<List<T>> FindAllAsync(T t)
+        public async virtual Task<List<T>> FindAllAsync()
         {
             return await DbContext.Set<T>().ToListAsync();
         }

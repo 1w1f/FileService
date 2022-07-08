@@ -1,10 +1,10 @@
 namespace FileServiceRepsitory.IRepository;
 
-public interface IBaseRepository<T> where T:class,new()
+public interface IBaseRepository<T> where T : class, new()
 {
-    
+
     Task<T> Create(T t);
-    Task<List<T>> FindAllAsync(T t);
+    Task<List<T>> FindAllAsync();
     // Task<T> FindByIdAsync(int id);
 
 
