@@ -7,6 +7,11 @@ namespace FileService.Filter;
 
 public class BusinessExceptionFilter : IExceptionFilter
 {
+    protected ILogger<BusinessExceptionFilter> _logger;
+    public BusinessExceptionFilter(ILogger<BusinessExceptionFilter> logger)
+    {
+        _logger=logger;
+    }
     public void OnException(ExceptionContext context)
     {
         if (context.Exception != null)
@@ -21,7 +26,7 @@ public class BusinessExceptionFilter : IExceptionFilter
             }
             else
             {
-                System.Console.WriteLine(context.Exception.StackTrace);
+                _logger.LogError($"异常:{context.Exception.GetType()}");
                 context.Result = new ObjectResult(new CustomApiResult
                 {
                     Code = 500,

@@ -4,17 +4,17 @@ using FileServiceRepsitory.Repository;
 
 namespace FileService.Service.Service;
 
-public class BaseService<T> : IBaseService<T> where T : class, new()
+public class BaseService<T,T1> : IBaseService<T,T1> where T : class, new() where T1:IBaseRepository<T>
 {
-    protected IBaseRepository<T> BaseRepository { get; set; }
+    protected T1 Repository { get; set; }
 
-    public BaseService(IBaseRepository<T> baseRepository)
+    public BaseService(T1 repository)
     {
-        BaseRepository = baseRepository;
+        Repository = repository;
     }
     public virtual Task<T> Create(T t)
     {
-        throw new NotImplementedException();
+        return Repository.Create(t);
     }
 
     public Task<bool> Delete(int id)
@@ -29,7 +29,7 @@ public class BaseService<T> : IBaseService<T> where T : class, new()
 
     public virtual Task<List<T>> FindAllAsync()
     {
-        throw new NotImplementedException();
+        return  Repository.FindAllAsync();
     }
 
     public Task<T> FindByIdAsync(int id)

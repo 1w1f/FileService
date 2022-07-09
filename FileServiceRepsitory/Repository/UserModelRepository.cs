@@ -20,5 +20,15 @@ namespace FileServiceRepsitory.Repository
         {
             return await DbContext.Users.Include(u => u.LoginRecords).AsNoTracking().ToListAsync();
         }
+
+
+
+
+
+        public async Task<UserDto> FindUserByUserNameAndPassWord(UserDto userDto)
+        {
+            var dtos= await DbContext.Users.Where(user => user.Name == userDto.Name && user.PassWord == userDto.PassWord).AsNoTracking().ToListAsync();
+            return dtos.FirstOrDefault();
+        }
     }
 }

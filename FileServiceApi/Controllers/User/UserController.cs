@@ -9,6 +9,8 @@ using FileService.Common.Utilities;
 using FileService.Service.IService;
 using FileServiceApi.Common;
 using FileServiceApi.Filter;
+using FileServiceApi.Service.Service.LoginRecord.IService;
+using FileServiceRepsitory.Repository.LoginRecord.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -23,12 +25,15 @@ namespace FileServiceApi.Controllers
         protected IUserService UserService { get; set; }
         protected IMapper Mapper { get; set; }
 
-        private ILogger<UserController> _logger { get; set; }
+        protected ILoginRecordService LoginRecordService { get; set; }
+        private ILogger<UserController> _logger
+        { get; set; }
 
-        public UserController(ILogger<UserController> logger, IUserService userService, IMapper mapper)
+        public UserController(ILogger<UserController> logger, IUserService userService, IMapper mapper, ILoginRecordService loginRecordService)
         {
             _logger = logger;
             UserService = userService;
+            LoginRecordService = loginRecordService;
             Mapper = mapper;
         }
         /// <summary>
@@ -46,7 +51,6 @@ namespace FileServiceApi.Controllers
             // return new UserDto();
             // if (string.IsNullOrEmpty(vo.Name) || string.IsNullOrEmpty(vo.PassWord))
             // {
-
             // }
             // var user = Mapper.Map<UserVo, UserDto>(vo);
             // user.CreateTime = new DateTime();
@@ -74,10 +78,20 @@ namespace FileServiceApi.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<string>> Login([FromBody] UserVo userVo)
         {
-            
+
             var clientIp = HttpContext.Connection.RemoteIpAddress;
             _logger.LogInformation($"clientIP:{clientIp}");
-            return "登录成功";
+            var userDto = Mapper.Map<UserVo, UserDto>(userVo);
+            var user = await UserService.FindByUserNameAndPassWord(userDto);
+            if (user != null)
+            {
+
+                return "登录成功";
+            }
+            else
+            {
+                return "用户名密码登录失败";
+            }
         }
 
         // public async Task<Action<UserD>>

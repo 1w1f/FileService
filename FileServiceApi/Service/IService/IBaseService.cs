@@ -1,6 +1,8 @@
+using FileServiceRepsitory.IRepository;
+
 namespace FileService.Service.IService;
 
-public interface IBaseService<T> where T : class, new()
+public interface IBaseService<T,T1> where T : class, new() where T1:IBaseRepository<T>
 {
 
     Task<List<T>> FindAllAsync();
