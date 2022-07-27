@@ -4,7 +4,7 @@
 
 namespace FileServiceRepsitory.Migrations
 {
-    public partial class updateLoginRecordId : Migration
+    public partial class replaceMigrationdifferservice : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileServiceRepsitory.Migrations
 {
     [DbContext(typeof(FileServiceDbContext))]
-    [Migration("20220704142831_createdatebase")]
-    partial class createdatebase
+    [Migration("20220726145342_addforigonkey")]
+    partial class addforigonkey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace FileServiceRepsitory.Migrations
 
             modelBuilder.Entity("DataModel.User.LoginRecordDto", b =>
                 {
-                    b.Property<int>("LoginRecordId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("LoginRecordId");
@@ -33,7 +33,6 @@ namespace FileServiceRepsitory.Migrations
                         .HasColumnName("LoginIp");
 
                     b.Property<string>("LoginTime")
-                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
                         .HasColumnName("LoginTime");
@@ -42,7 +41,7 @@ namespace FileServiceRepsitory.Migrations
                         .HasColumnType("int")
                         .HasColumnName("UserId");
 
-                    b.HasKey("LoginRecordId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -66,6 +65,11 @@ namespace FileServiceRepsitory.Migrations
 
                     b.Property<string>("PassWord")
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("UpdateTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("UpdateTime");
 
                     b.HasKey("Id");
 

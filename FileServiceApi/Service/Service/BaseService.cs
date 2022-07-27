@@ -1,10 +1,11 @@
+using DataModel;
 using FileService.Service.IService;
 using FileServiceRepsitory.IRepository;
 using FileServiceRepsitory.Repository;
 
 namespace FileService.Service.Service;
 
-public class BaseService<T,T1> : IBaseService<T,T1> where T : class, new() where T1:IBaseRepository<T>
+public class BaseService<T, T1> : IBaseService<T, T1> where T : ModelId where T1 : IBaseRepository<T>
 {
     protected T1 Repository { get; set; }
 
@@ -12,24 +13,24 @@ public class BaseService<T,T1> : IBaseService<T,T1> where T : class, new() where
     {
         Repository = repository;
     }
-    public virtual Task<T> Create(T t)
+    public virtual Task<T> CreateAsync(T t)
     {
-        return Repository.Create(t);
+        return Repository.CreateAsync(t);
     }
 
-    public Task<bool> Delete(int id)
+    public Task<bool> DeleteAsync(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> Edit(T t)
+    public virtual Task<bool> EditAsync(T t)
     {
         throw new NotImplementedException();
     }
 
     public virtual Task<List<T>> FindAllAsync()
     {
-        return  Repository.FindAllAsync();
+        return Repository.FindAllAsync();
     }
 
     public Task<T> FindByIdAsync(int id)

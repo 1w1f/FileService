@@ -1,10 +1,13 @@
 using FileService.Filter;
 using FileServiceApi.ServiceExtension;
+using FileServiceRepsitory.Repository;
 using FileServiceRepsitory.Repository.DbContextModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container.
 builder.Services.AddControllers(opt => opt.Filters.Add<BusinessExceptionFilter>());
 
@@ -27,7 +30,13 @@ builder.Services.AddSwaggerGen(option =>
 builder.Services.AddCustom();
 
 var sqlConection = builder.Configuration["sqlCon"];
-builder.Services.AddDbContext<FileServiceDbContext>(option => option.UseMySql(sqlConection, new MySqlServerVersion(new Version(8, 0, 27)), x => x.MigrationsAssembly("FileServiceRepsitory")));
+builder.Services.AddDbContext<FileServiceDbContext>(
+    option =>
+    {
+        option.UseMySql(sqlConection, new MySqlServerVersion(new Version(8, 0, 27)), x => x.MigrationsAssembly("FileServiceRepsitory"));
+        option.ReplaceService<IMigrationsModelDiffer, MigrationWithOutForegnKey>();
+    }
+);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -2,10 +2,9 @@ using DataModel.User;
 
 namespace DataModel.File;
 
-public class FileModel
+public class FileModel : ModelId
 {
 
-    public int FileId { get; set; }
     public int UserId { get; set; }
     public DateTime CreateTime { get; set; }
     public bool IsDelete { get; set; }
@@ -13,6 +12,6 @@ public class FileModel
     public string SavaPath { get; set; }
 
     /// <summary>文件大小单位为字节</summary>
-    public long FileSize{get;set;}
+    public long FileSize { get; set; }
 
 }

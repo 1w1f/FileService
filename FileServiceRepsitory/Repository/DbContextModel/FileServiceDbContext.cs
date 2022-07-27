@@ -26,14 +26,15 @@ public class FileServiceDbContext : DbContext
             user.Property(u => u.Id).HasColumnName("UserId").IsRequired();
             user.Property(u => u.Name).HasColumnName("UserName").HasColumnType("nvarchar(20)").HasMaxLength(20);
             user.Property(u => u.PassWord).HasColumnType("nvarchar(200)");
+            user.Property(u => u.UpdateTime).HasColumnName("UpdateTime").HasColumnType("nvarchar(50)");
             user.HasKey(u => u.Id);
             user.ToTable("Users");
         });
-        modelBuilder.Entity<LoginRecordDto>().HasKey(u => u.LoginRecordId);
+        modelBuilder.Entity<LoginRecordDto>().HasKey(u => u.Id);
         modelBuilder.Entity<LoginRecordDto>(loginRecord =>
         {
-            loginRecord.Property(r => r.LoginRecordId).HasColumnName("LoginRecordId").HasColumnType("int").IsRequired();
-            loginRecord.Property(r => r.LoginTime).HasColumnName("LoginTime").HasColumnType("nvarchar(15)").HasMaxLength(15);
+            loginRecord.Property(r => r.Id).HasColumnName("LoginRecordId").HasColumnType("int").IsRequired();
+            loginRecord.Property(r => r.LoginTime).HasColumnName("LoginTime").HasColumnType("nvarchar(50)").HasMaxLength(50);
             loginRecord.Property(r => r.LoginIp).HasColumnName("LoginIp").HasColumnType("nvarchar(20)");
             loginRecord.Property(r => r.UserId).HasColumnName("UserId").HasColumnType("int");
         });

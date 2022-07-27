@@ -14,7 +14,7 @@
             "dotnetRunMessages": true,
             "launchBrowser": true,
             "launchUrl": "swagger",
-            "applicationUrl": "http://192.168.11.185:5239",
+            "applicationUrl": "http://192.168.1.102:5239",
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             }

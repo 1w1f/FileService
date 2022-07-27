@@ -18,5 +18,9 @@ namespace FileServiceApi.Service.Service
             return await Repository.FindUserByUserNameAndPassWord(userDto);
         }
 
+        public Task<bool> UpdateUserNameAndPassWord(UserDto userDto, bool updateName, bool updatePassWord)
+        {
+            return Repository.UpdateNameAndPassWord(userDto, updateName, updatePassWord);
+        }
     }
 }

@@ -43,9 +43,8 @@ namespace FileServiceApi.Controllers
         /// <returns></returns>
         [HttpPost("Create")]
 
-        public async Task<ActionResult<UserVo>> CreateUser([FromBody] UserVo vo)
+        public async Task<ActionResult<UserVo>> CreateUser([FromBody] UserWithPassWordVo vo)
         {
-            // return NotFound(new UserDto());
             return Mapper.Map<UserDto, UserVo>(new UserDto());
             // throw new ArgumentException(@"系统异常测试");
             // return new UserDto();
@@ -71,21 +70,28 @@ namespace FileServiceApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("FindAllUsers")]
-        public async Task<ActionResult<List<UserDto>>> FindUserIncludeLoginRecords()
+        public async Task<ActionResult<List<UserVo>>> FindUserIncludeLoginRecords()
         {
-            return await UserService.FindAllAsync();
+            var userDtoList= await UserService.FindAllAsync();
+            return userDtoList.ConvertAll(new Converter<UserDto, UserVo>(userDto=>Mapper.Map<UserDto,UserVo>(userDto)));
         }
-        [HttpPost("Login")]
-        public async Task<ActionResult<string>> Login([FromBody] UserVo userVo)
+
+
+        [HttpGet("Login/{Name}/{passWord}")]
+        public async Task<ActionResult<string>> Login(string Name, string passWord)
         {
 
             var clientIp = HttpContext.Connection.RemoteIpAddress;
             _logger.LogInformation($"clientIP:{clientIp}");
-            var userDto = Mapper.Map<UserVo, UserDto>(userVo);
+            var userDto = new UserDto
+            {
+                Name = Name,
+                PassWord = passWord
+            };
             var user = await UserService.FindByUserNameAndPassWord(userDto);
             if (user != null)
             {
-
+                await LoginRecordService.CreateAsync(new LoginRecordDto(clientIp, DateTime.Now, user.Id));
                 return "登录成功";
             }
             else
@@ -94,6 +100,41 @@ namespace FileServiceApi.Controllers
             }
         }
 
-        // public async Task<Action<UserD>>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("UpdateNameAndPassWord")]
+        public async Task<ActionResult> UpdateUserName(UserWithPassWordVo userWithPassWordVo)
+        {
+            if (string.IsNullOrEmpty(userWithPassWordVo.Id))
+            {
+                throw new ArgumentException("修改的用户id不能为空");
+            }
+            bool updateName = false, updatePassWord = false;
+            if (!string.IsNullOrEmpty(userWithPassWordVo.Name))
+            {
+                updateName = true;
+            }
+            if (!string.IsNullOrEmpty(userWithPassWordVo.PassWord))
+            {
+                updatePassWord = true;
+            }
+            if (!updateName && !updatePassWord)
+            {
+                throw new ArgumentException("无效操作，请检查传参");
+            }
+            var userDto = Mapper.Map<UserWithPassWordVo, UserDto>(userWithPassWordVo);
+            userDto.UpdateTime = DateTime.Now;
+            var result = await UserService.UpdateUserNameAndPassWord(Mapper.Map<UserWithPassWordVo, UserDto>(userWithPassWordVo), updateName, updatePassWord);
+            if (!result)
+            {
+                throw new ArgumentException("请求失败");
+            }
+            else
+            {
+                return Ok();
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using FileServiceRepsitory.Repository.DbContextModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileServiceRepsitory.Migrations
 {
     [DbContext(typeof(FileServiceDbContext))]
-    partial class FileServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220726145039_adduser-updatetime2remove-forgionkey2")]
+    partial class adduserupdatetime2removeforgionkey2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,9 +33,12 @@ namespace FileServiceRepsitory.Migrations
                         .HasColumnName("LoginIp");
 
                     b.Property<string>("LoginTime")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)")
                         .HasColumnName("LoginTime");
+
+                    b.Property<int?>("UserDtoId")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -41,7 +46,7 @@ namespace FileServiceRepsitory.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserDtoId");
 
                     b.ToTable("LoginRecords");
                 });
@@ -78,9 +83,7 @@ namespace FileServiceRepsitory.Migrations
                 {
                     b.HasOne("DataModel.User.UserDto", null)
                         .WithMany("LoginRecords")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserDtoId");
                 });
 
             modelBuilder.Entity("DataModel.User.UserDto", b =>

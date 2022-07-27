@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileServiceRepsitory.Migrations
 {
     [DbContext(typeof(FileServiceDbContext))]
-    [Migration("20220327054706_UpdatexxxxTable")]
-    partial class UpdatexxxxTable
+    [Migration("20220727135214_updateloginrecordlogintimelength")]
+    partial class updateloginrecordlogintimelength
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,9 +21,9 @@ namespace FileServiceRepsitory.Migrations
                 .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("DataModel.User.LoginRecord", b =>
+            modelBuilder.Entity("DataModel.User.LoginRecordDto", b =>
                 {
-                    b.Property<int>("LoginRecordId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("LoginRecordId");
@@ -33,23 +33,22 @@ namespace FileServiceRepsitory.Migrations
                         .HasColumnName("LoginIp");
 
                     b.Property<string>("LoginTime")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("LoginTime");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserId");
 
-                    b.HasKey("LoginRecordId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("LoginRecords");
                 });
 
-            modelBuilder.Entity("DataModel.User.UserModel", b =>
+            modelBuilder.Entity("DataModel.User.UserDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -67,21 +66,26 @@ namespace FileServiceRepsitory.Migrations
                     b.Property<string>("PassWord")
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("UpdateTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("UpdateTime");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("DataModel.User.LoginRecord", b =>
+            modelBuilder.Entity("DataModel.User.LoginRecordDto", b =>
                 {
-                    b.HasOne("DataModel.User.UserModel", null)
+                    b.HasOne("DataModel.User.UserDto", null)
                         .WithMany("LoginRecords")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DataModel.User.UserModel", b =>
+            modelBuilder.Entity("DataModel.User.UserDto", b =>
                 {
                     b.Navigation("LoginRecords");
                 });

@@ -4,7 +4,7 @@
 
 namespace FileServiceRepsitory.Migrations
 {
-    public partial class createdatebase : Migration
+    public partial class replaceMigrationdifferservice2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
