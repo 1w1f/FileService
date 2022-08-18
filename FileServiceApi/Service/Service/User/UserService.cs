@@ -1,5 +1,6 @@
 using DataModel;
 using DataModel.User;
+using FileService.Service.BaseService;
 using FileService.Service.IService;
 using FileService.Service.Service;
 using FileServiceRepsitory.IRepository;

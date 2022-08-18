@@ -1,6 +1,5 @@
-using DataModel;
 using DataModel.User;
-using FileService.Service.Service;
+using FileService.Service.BaseService;
 using FileServiceRepsitory.IRepository;
 
 namespace FileService.Service.IService;

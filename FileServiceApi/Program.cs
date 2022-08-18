@@ -1,42 +1,24 @@
 using FileService.Filter;
+using FileService.Middleware;
+using FileService.ServerExceptionHandler;
+using FileServiceApi.Filter;
 using FileServiceApi.ServiceExtension;
-using FileServiceRepsitory.Repository;
-using FileServiceRepsitory.Repository.DbContextModel;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers(opt => opt.Filters.Add<BusinessExceptionFilter>());
+builder.Services.AddControllers(opt => opt.Filters.Add<ResultFilter>());
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(option =>
-{
-    option.SwaggerDoc("v1", new()
-    {
-        Title = "FileServiceApi",
-        Version = "V1"
-    });
-    //配置swagger从文件中读取相关注释
-    var fileServiceFilePath = Path.Combine(System.AppContext.BaseDirectory, "FileService.xml");
-    var DataModelFilePath = Path.Combine(System.AppContext.BaseDirectory, "DataModel.xml");
-    option.IncludeXmlComments(fileServiceFilePath);
-    option.IncludeXmlComments(DataModelFilePath);
 
-});
-builder.Services.AddCustom();
+builder.Services.AddCustomService();
 
-var sqlConection = builder.Configuration["sqlCon"];
-builder.Services.AddDbContext<FileServiceDbContext>(
-    option =>
-    {
-        option.UseMySql(sqlConection, new MySqlServerVersion(new Version(8, 0, 27)), x => x.MigrationsAssembly("FileServiceRepsitory"));
-        option.ReplaceService<IMigrationsModelDiffer, MigrationWithOutForegnKey>();
-    }
-);
+
+builder.Services.AddJwtAuth(builder.Configuration["AuthKey"]);
+
+builder.Services.AddDbContext(builder.Configuration["sqlCon"]);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,8 +28,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<CustomExceptionMiddleware>();
+
+
 // app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

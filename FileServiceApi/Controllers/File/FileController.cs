@@ -1,7 +1,6 @@
-using System.Net;
-using FileServiceApi.Service.IService;
+using FileServiceApi.Common;
+using FileServiceApi.Service.File;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 
 namespace FileServiceApi.Controllers
@@ -11,8 +10,8 @@ namespace FileServiceApi.Controllers
     public class FileController : ControllerBase
     {
 
-        protected IFileService _fileService;
-        public FileController(IFileService fileService)
+        protected IFileStoreService _fileService;
+        public FileController(IFileStoreService fileService)
         {
             _fileService = fileService;
         }
@@ -21,6 +20,7 @@ namespace FileServiceApi.Controllers
         [HttpGet(nameof(Hello))]
         public IActionResult Hello()
         {
+            throw new BusinessException(5001, "业务异常");
             return Ok();
         }
         /// <summary>

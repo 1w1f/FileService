@@ -1,25 +1,23 @@
-using System;
 using System.Net;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using AutoMapper;
-using DataModel;
 using DataModel.User;
 using DataModel.User.Vo;
-using FileService.Common;
-using FileService.Common.Utilities;
 using FileService.Service.IService;
 using FileServiceApi.Common;
-using FileServiceApi.Filter;
 using FileServiceApi.Service.Service.LoginRecord.IService;
-using FileServiceRepsitory.Repository.LoginRecord.IRepository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FileServiceApi.Controllers
 {
     [ApiController]
     [Route("Api/[Controller]")]
-    [ResultFilter]
     [Produces("application/json")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         protected IUserService UserService { get; set; }
@@ -29,9 +27,13 @@ namespace FileServiceApi.Controllers
         private ILogger<UserController> _logger
         { get; set; }
 
-        public UserController(ILogger<UserController> logger, IUserService userService, IMapper mapper, ILoginRecordService loginRecordService)
+
+        private IConfiguration _configuration;
+
+        public UserController(ILogger<UserController> logger, IUserService userService, IMapper mapper, ILoginRecordService loginRecordService, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
             UserService = userService;
             LoginRecordService = loginRecordService;
             Mapper = mapper;
@@ -42,26 +44,23 @@ namespace FileServiceApi.Controllers
         /// <param name="vo">uservo</param>
         /// <returns></returns>
         [HttpPost("Create")]
-
         public async Task<ActionResult<UserVo>> CreateUser([FromBody] UserWithPassWordVo vo)
         {
-            return Mapper.Map<UserDto, UserVo>(new UserDto());
-            // throw new ArgumentException(@"系统异常测试");
-            // return new UserDto();
-            // if (string.IsNullOrEmpty(vo.Name) || string.IsNullOrEmpty(vo.PassWord))
-            // {
-            // }
-            // var user = Mapper.Map<UserVo, UserDto>(vo);
-            // user.CreateTime = new DateTime();
-            // var result = await UserService.Create(user);
-            // if (result != null)
-            // {
-            //     return result;
-            // }
-            // else
-            // {
-            //     return null;
-            // }
+            if (string.IsNullOrEmpty(vo.Name) || string.IsNullOrEmpty(vo.PassWord))
+            {
+                throw new BusinessException(4001, "用户名或密码不能为空");
+            }
+            var user = Mapper.Map<UserVo, UserDto>(vo);
+            user.CreateTime = new DateTime();
+            var result = await UserService.CreateAsync(user);
+            if (result != null)
+            {
+                return Mapper.Map<UserDto, UserVo>(result); ;
+            }
+            else
+            {
+                throw new BusinessException(4002, "创建失败");
+            }
         }
 
 
@@ -72,15 +71,15 @@ namespace FileServiceApi.Controllers
         [HttpGet("FindAllUsers")]
         public async Task<ActionResult<List<UserVo>>> FindUserIncludeLoginRecords()
         {
-            var userDtoList= await UserService.FindAllAsync();
-            return userDtoList.ConvertAll(new Converter<UserDto, UserVo>(userDto=>Mapper.Map<UserDto,UserVo>(userDto)));
+            var userDtoList = await UserService.FindAllAsync();
+            return userDtoList.ConvertAll(new Converter<UserDto, UserVo>(userDto => Mapper.Map<UserDto, UserVo>(userDto)));
         }
 
-
+        [AllowAnonymous]
         [HttpGet("Login/{Name}/{passWord}")]
-        public async Task<ActionResult<string>> Login(string Name, string passWord)
+        public async Task<ActionResult<UserVoWithToken>> Login(string Name, string passWord)
         {
-
+            // throw new BusinessException(4401, "ceshi");
             var clientIp = HttpContext.Connection.RemoteIpAddress;
             _logger.LogInformation($"clientIP:{clientIp}");
             var userDto = new UserDto
@@ -92,13 +91,41 @@ namespace FileServiceApi.Controllers
             if (user != null)
             {
                 await LoginRecordService.CreateAsync(new LoginRecordDto(clientIp, DateTime.Now, user.Id));
-                return "登录成功";
+
+
+                var claims = new Claim[]
+               {
+                    new Claim(ClaimTypes.Name,user.Name),
+                    new Claim("Id",user.Id.ToString()),
+                    new Claim("name",user.Name),
+               };
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthKey"]));
+                var token = new JwtSecurityToken(
+                    issuer: "http://192.168.1.102:5129",
+                    audience: "http://192.168.1.102:5129",
+                    claims: claims,
+                    notBefore: DateTime.Now,
+                    expires: DateTime.Now.AddHours(1),
+                    signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
+                var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+                user.Token = jwtToken;
+                user.ExpirationTime = DateTime.Now.AddHours(1).ToString("yyyy-mm-dd HH-mm-ss");
+
+
+                var userVoWithToken = Mapper.Map<UserVoWithToken>(user);
+                return userVoWithToken;
             }
             else
             {
-                return "用户名密码登录失败";
+                throw new BusinessException(4011, "用户名密码登录失败");
             }
         }
+
+
+
+
+
 
         /// <summary>
         /// 

@@ -1,4 +1,5 @@
 using DataModel.User;
+using FileService.Service.BaseService;
 using FileService.Service.Service;
 using FileServiceApi.Service.Service.LoginRecord.IService;
 using FileServiceRepsitory.Repository.LoginRecord;

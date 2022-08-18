@@ -1,7 +1,7 @@
 using DataModel;
 using FileServiceRepsitory.IRepository;
 
-namespace FileService.Service.IService;
+namespace FileService.Service.BaseService;
 
 public interface IBaseService<T, T1> where T : ModelId where T1 : IBaseRepository<T>
 {

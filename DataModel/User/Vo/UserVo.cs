@@ -15,5 +15,5 @@ public class UserVo
     /// </summary>
     /// <example>zhangsan</example>
     public string Name { get; set; }
-    
+
 }

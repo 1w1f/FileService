@@ -10,7 +10,7 @@ public class BusinessExceptionFilter : IExceptionFilter
     protected ILogger<BusinessExceptionFilter> _logger;
     public BusinessExceptionFilter(ILogger<BusinessExceptionFilter> logger)
     {
-        _logger=logger;
+        _logger = logger;
     }
     public void OnException(ExceptionContext context)
     {
