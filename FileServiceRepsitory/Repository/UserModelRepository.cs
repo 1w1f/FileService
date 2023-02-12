@@ -28,7 +28,8 @@ namespace FileServiceRepsitory.Repository
         /// </summary>
         /// <param name="userDto"></param>
         /// <returns></returns>
-        public async Task<UserDto> FindUserByUserNameAndPassWord(UserDto userDto)
+        public async Task<UserDto> FindUserByUserNameAndPassWord(UserDto
+        userDto)
         {
             var dtos = await DbContext.Users.AsNoTracking().Where(user => user.Name == userDto.Name && user.PassWord == userDto.PassWord).ToListAsync();
             return dtos.FirstOrDefault();

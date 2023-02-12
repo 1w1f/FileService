@@ -1,3 +1,4 @@
+using FileService.Application;
 using FileService.Filter;
 using FileService.Middleware;
 using FileService.ServerExceptionHandler;
@@ -14,7 +15,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddCustomService();
 
-
 builder.Services.AddJwtAuth(builder.Configuration["AuthKey"]);
 
 builder.Services.AddDbContext(builder.Configuration["sqlCon"]);
@@ -30,14 +30,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<CustomExceptionMiddleware>();
 
-
 // app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// 自动迁移表
+app.AutoMigateDatebase();
+
 app.Run();
-
-
-

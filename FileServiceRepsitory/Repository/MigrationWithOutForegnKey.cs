@@ -11,20 +11,33 @@ namespace FileServiceRepsitory.Repository;
 
 public class MigrationWithOutForegnKey : MigrationsModelDiffer
 {
-    public MigrationWithOutForegnKey(IRelationalTypeMappingSource typeMappingSource, IMigrationsAnnotationProvider migrationsAnnotations, IChangeDetector changeDetector, IUpdateAdapterFactory updateAdapterFactory, CommandBatchPreparerDependencies commandBatchPreparerDependencies) : base(typeMappingSource, migrationsAnnotations, changeDetector, updateAdapterFactory, commandBatchPreparerDependencies)
+    public MigrationWithOutForegnKey(
+        IRelationalTypeMappingSource typeMappingSource,
+        IMigrationsAnnotationProvider migrationsAnnotations,
+        IChangeDetector changeDetector,
+        IUpdateAdapterFactory updateAdapterFactory,
+        CommandBatchPreparerDependencies commandBatchPreparerDependencies
+    )
+        : base(
+            typeMappingSource,
+            migrationsAnnotations,
+            changeDetector,
+            updateAdapterFactory,
+            commandBatchPreparerDependencies
+        ) { }
+
+    public override IReadOnlyList<MigrationOperation> GetDifferences(
+        IRelationalModel source,
+        IRelationalModel target
+    )
     {
-
-
-    }
-
-    public override IReadOnlyList<MigrationOperation> GetDifferences(IRelationalModel source, IRelationalModel target)
-    {
-        return base.GetDifferences(source, target);
+        // return base.GetDifferences(source, target);
         var operations = base.GetDifferences(source, target)
-        .Where(op => !(op is AddForeignKeyOperation))
-        .Where(op => !(op is DropForeignKeyOperation))
-        .ToList();
-        foreach (var operation in operations.OfType<CreateTableOperation>()) operation.ForeignKeys?.Clear();
+            .Where(op => !(op is AddForeignKeyOperation))
+            .Where(op => !(op is DropForeignKeyOperation))
+            .ToList();
+        foreach (var operation in operations.OfType<CreateTableOperation>())
+            operation.ForeignKeys?.Clear();
         return operations;
     }
 }

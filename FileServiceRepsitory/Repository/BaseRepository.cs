@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FileServiceRepsitory.Repository
 {
-    public class BaseRepository<T, TDbContext> : IBaseRepository<T> where T : ModelId where TDbContext : DbContext
+    public class BaseRepository<T, TDbContext> : IBaseRepository<T>
+        where T : ModelId
+        where TDbContext : DbContext
     {
         protected TDbContext DbContext { get; set; }
 
@@ -19,9 +21,6 @@ namespace FileServiceRepsitory.Repository
             DbContext.SaveChanges();
             return result.Entity;
         }
-
-
-
 
         public Task<bool> Delete(int id)
         {
