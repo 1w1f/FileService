@@ -23,8 +23,8 @@ builder.Services.AddDbContext(builder.Configuration["sqlCon"]);
 builder.Services.AddMinio(option =>
 {
     option.AccessKey = builder.Configuration["AccessKey"];
+    option.SecretKey = builder.Configuration["SecretKey"];
     option.Endpoint = builder.Configuration["192.168.50.16:9000"];
-    option.SecretKey = builder.Configuration["EHkdbzwx726JWiJEYXBAu14npHF7BO6b"];
 });
 
 
