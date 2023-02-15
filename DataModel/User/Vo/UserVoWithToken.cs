@@ -9,7 +9,6 @@ public class UserVoWithToken : UserVo
     /// <value>string</value>
     public string ExpirationTime { get; set; }
 
-
     public void UpdateTokenAndExpiraction(string token, string expirationTime)
     {
         ExpirationTime = expirationTime;

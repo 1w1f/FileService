@@ -1,9 +1,11 @@
+using System.Text.Json;
 using FileService.Application;
-using FileService.Filter;
 using FileService.Middleware;
-using FileService.ServerExceptionHandler;
+using FileServiceApi.Common;
 using FileServiceApi.Filter;
 using FileServiceApi.ServiceExtension;
+using Microsoft.AspNetCore.Diagnostics;
+using Minio.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,23 +20,35 @@ builder.Services.AddCustomService();
 builder.Services.AddJwtAuth(builder.Configuration["AuthKey"]);
 
 builder.Services.AddDbContext(builder.Configuration["sqlCon"]);
+builder.Services.AddMinio(option =>
+{
+    option.AccessKey = builder.Configuration["AccessKey"];
+    option.Endpoint = builder.Configuration["192.168.50.16:9000"];
+    option.SecretKey = builder.Configuration["EHkdbzwx726JWiJEYXBAu14npHF7BO6b"];
+});
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+// 使用框架内部的异常中间件处理异常 代替自定义中间件
+// app.UseMiddleware<CustomExceptionMiddleware>();
+app.UseExceptionHandler(builder => builder.Run(ExceptionHandler.HandlerHttpFeatureException));
 
-app.UseMiddleware<CustomExceptionMiddleware>();
 
-// app.UseHttpsRedirection();
+
+// app.Run(ctx =>
+// { throw new Exception("9999"); });
+
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
-app.UseAuthorization();
 
+app.UseAuthorization();
 app.MapControllers();
 
 // 自动迁移表

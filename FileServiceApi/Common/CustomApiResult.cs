@@ -8,7 +8,5 @@ namespace FileServiceApi.Common
         public string Message { get; set; } = "请求成功";
         public object Data { get; set; }
         public string TraceId { get; set; }
-
-
     }
 }

@@ -14,8 +14,7 @@ public class UserProfile : Profile
         CreateMap<UserWithPassWordVo, UserDto>().ForMember(des => des.Name, option => option.MapFrom(source => source.Name)).ForMember(des => des.PassWord, option => option.MapFrom(source => source.PassWord));
 
 
-        // CreateMap<UserDto,UserVoWithToken>().ForMember(des=>des.Name,option=>option.MapFrom(source=>source.Name)).ForMember(des=>des.Id,option=>option.MapFrom(souce=>souce.Id)).ForMember(des=>des.ExpirationTime,)
-
+        CreateMap<UserDto, UserVoWithToken>();
 
 
         CreateMap<UserVo, UserDto>().ForMember(des => des.Name, option => option.MapFrom(vo => vo.Name));

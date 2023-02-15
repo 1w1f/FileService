@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace DataModel.User;
 public class UserDto : ModelId
 {
@@ -23,7 +23,4 @@ public class UserDto : ModelId
     /// <value>string</value>
     [NotMapped]
     public string ExpirationTime { get; set; }
-
-
-
 }

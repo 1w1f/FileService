@@ -10,7 +10,6 @@ public interface IBaseRepository<T> where T : ModelId
 
     Task<T> FindByIdAsync(int id);
 
-
     Task<bool> Delete(int id);
 
     Task<bool> Edit(T t);

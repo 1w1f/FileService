@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using FileService.Common;
 using FileServiceApi.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

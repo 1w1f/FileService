@@ -1,5 +1,5 @@
-using System.Net;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
@@ -8,9 +8,9 @@ using DataModel.User.Vo;
 using FileService.Service.IService;
 using FileServiceApi.Common;
 using FileServiceApi.Service.Service.LoginRecord.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FileServiceApi.Controllers
 {
@@ -79,7 +79,6 @@ namespace FileServiceApi.Controllers
         [HttpGet("Login/{Name}/{passWord}")]
         public async Task<ActionResult<UserVoWithToken>> Login(string Name, string passWord)
         {
-            // throw new BusinessException(4401, "ceshi");
             var clientIp = HttpContext.Connection.RemoteIpAddress;
             _logger.LogInformation($"clientIP:{clientIp}");
             var userDto = new UserDto
@@ -96,8 +95,8 @@ namespace FileServiceApi.Controllers
                 var claims = new Claim[]
                {
                     new Claim(ClaimTypes.Name,user.Name),
-                    new Claim("Id",user.Id.ToString()),
-                    new Claim("name",user.Name),
+                    new Claim("UserId",user.Id.ToString()),
+                    new Claim("test",user.Name),
                };
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthKey"]));
                 var token = new JwtSecurityToken(
@@ -113,11 +112,12 @@ namespace FileServiceApi.Controllers
                 user.ExpirationTime = DateTime.Now.AddHours(1).ToString("yyyy-mm-dd HH-mm-ss");
 
 
-                var userVoWithToken = Mapper.Map<UserVoWithToken>(user);
+                UserVoWithToken userVoWithToken = Mapper.Map<UserVoWithToken>(user);
                 return userVoWithToken;
             }
             else
             {
+                return Ok(new { code = 100, mesage = "222" });
                 throw new BusinessException(4011, "用户名密码登录失败");
             }
         }

@@ -22,30 +22,28 @@ namespace FileServiceApi.ServiceExtension
 {
     public static class ServiceExtension
     {
-        public static IServiceCollection AddCustomService(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddCustomService(this IServiceCollection services)
         {
-            serviceCollection.AddScoped<IUserService, UserService>();
-            serviceCollection.AddScoped<IUserRepository, UserModelRepository>();
-            serviceCollection.AddScoped<ILoginRecordService, LoginRecordService>();
-            serviceCollection.AddScoped<ILoginRecordRepository, LoginRecordRepository>();
-
-            serviceCollection.AddScoped<IFileStoreService, FileStoreService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserModelRepository>();
+            services.AddScoped<ILoginRecordService, LoginRecordService>();
+            services.AddScoped<ILoginRecordRepository, LoginRecordRepository>();
+            services.AddScoped<IFileStoreService, FileStoreService>();
 
             #region AutoMapperDI
-            serviceCollection.AddAutoMapper(typeof(UserProfile));
+            services.AddAutoMapper(typeof(UserProfile));
             #endregion
 
 
             #region configure Swagger
 
-            serviceCollection.AddSwaggerGen(option =>
+            services.AddSwaggerGen(option =>
             {
                 option.SwaggerDoc("v1", new()
                 {
                     Title = "FileServiceApi",
                     Version = "V1"
                 });
-
                 #region Swagger 使用鉴权组件
 
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -68,12 +66,7 @@ namespace FileServiceApi.ServiceExtension
                         new string[]{}
                     }
                 });
-
-
-
                 #endregion
-
-
 
                 //配置swagger从文件中读取相关注释
                 var fileServiceFilePath = Path.Combine(System.AppContext.BaseDirectory, "FileService.xml");
@@ -83,7 +76,7 @@ namespace FileServiceApi.ServiceExtension
             });
             #endregion
 
-            return serviceCollection;
+            return services;
         }
 
 
