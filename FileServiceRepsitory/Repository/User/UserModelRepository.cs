@@ -5,7 +5,7 @@ using FileServiceRepsitory.IRepository;
 using FileServiceRepsitory.Repository.DbContextModel;
 using Microsoft.EntityFrameworkCore;
 
-namespace FileServiceRepsitory.Repository
+namespace FileServiceRepsitory.Repository.User
 {
     public class UserModelRepository : BaseRepository<UserDto, FileServiceDbContext>, IUserRepository
     {

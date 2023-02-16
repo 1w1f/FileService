@@ -1,10 +1,7 @@
-using System.Text.Json;
 using FileService.Application;
-using FileService.Middleware;
 using FileServiceApi.Common;
 using FileServiceApi.Filter;
 using FileServiceApi.ServiceExtension;
-using Microsoft.AspNetCore.Diagnostics;
 using Minio.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,13 +19,14 @@ builder.Services.AddJwtAuth(builder.Configuration["AuthKey"]);
 builder.Services.AddDbContext(builder.Configuration["sqlCon"]);
 builder.Services.AddMinio(option =>
 {
-    option.AccessKey = builder.Configuration["AccessKey"];
-    option.SecretKey = builder.Configuration["SecretKey"];
-    option.Endpoint = builder.Configuration["192.168.50.16:9000"];
+    option.AccessKey = builder.Configuration["Minio:AccessKey"];
+    option.SecretKey = builder.Configuration["Minio:SecretKey"];
+    option.Endpoint = builder.Configuration["Minio:EndPoint"];
 });
 
 
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -44,7 +42,7 @@ app.UseExceptionHandler(builder => builder.Run(ExceptionHandler.HandlerHttpFeatu
 // app.Run(ctx =>
 // { throw new Exception("9999"); });
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthentication();
 

@@ -1,7 +1,10 @@
 using FileServiceApi.Common;
 using FileServiceApi.Service.File;
+using FileServiceApi.Service.OssFileService;
+using FileServiceApi.Service.OssFileService.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using Minio;
 
 namespace FileServiceApi.Controllers
 {
@@ -11,28 +14,26 @@ namespace FileServiceApi.Controllers
     {
 
         protected IFileStoreService _fileService;
-        public FileController(IFileStoreService fileService)
+        private ILogger<FileController> _logger;
+        public FileController(IFileStoreService fileService, ILogger<FileController> logger)
         {
             _fileService = fileService;
+            _logger = logger;
         }
 
 
-        [HttpGet(nameof(Hello))]
-        public IActionResult Hello()
-        {
-            throw new BusinessException(5001, "业务异常");
-            return Ok();
-        }
         /// <summary>
         /// 方法一：使用 asp.net core的模型绑定
+        /// formOptions中设置了默认的请求大小限制为128M
         /// 缓冲方案上传文件 适用于小文件上传场景(该方案占用服务器内存)
         /// </summary>
         /// <param name="formFiles">表单文件</param>
         /// <returns></returns>
-        [HttpPost(nameof(SaveFile))]
+        [HttpPost("SaveFile")]
         [DisableRequestSizeLimit]
-        public IActionResult SaveFile(IFormFile formFiles)
+        public async Task<ActionResult> SaveFileAsync([FromForm] IFormFile formFiles, [FromServices] IFileOperation fileOperation)
         {
+            await fileOperation.UploadFormFileAsync(formFiles);
             return Ok();
         }
 
