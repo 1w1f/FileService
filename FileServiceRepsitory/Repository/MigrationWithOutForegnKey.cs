@@ -24,7 +24,8 @@ public class MigrationWithOutForegnKey : MigrationsModelDiffer
             changeDetector,
             updateAdapterFactory,
             commandBatchPreparerDependencies
-        ) { }
+        )
+    { }
 
     public override IReadOnlyList<MigrationOperation> GetDifferences(
         IRelationalModel source,
@@ -33,8 +34,8 @@ public class MigrationWithOutForegnKey : MigrationsModelDiffer
     {
         // return base.GetDifferences(source, target);
         var operations = base.GetDifferences(source, target)
-            .Where(op => !(op is AddForeignKeyOperation))
-            .Where(op => !(op is DropForeignKeyOperation))
+            .Where(op => op is not AddForeignKeyOperation)
+            .Where(op => op is not DropForeignKeyOperation)
             .ToList();
         foreach (var operation in operations.OfType<CreateTableOperation>())
             operation.ForeignKeys?.Clear();
