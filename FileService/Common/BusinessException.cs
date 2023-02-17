@@ -1,4 +1,4 @@
-namespace FileServiceApi.Common;
+namespace FileService.Common;
 
 public class BusinessException : Exception
 {

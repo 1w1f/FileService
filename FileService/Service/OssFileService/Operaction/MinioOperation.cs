@@ -22,10 +22,14 @@ namespace FileServiceApi.Service.OssFileService.Operaction
             _configuration = configuration;
         }
 
-        // public Task<object> GetFileInfo(string fileName)
-        // {
 
-        // }
+
+        public async Task GetFileInfoAsync(string fileName)
+        {
+            var args = new StatObjectArgs().WithBucket(_configuration["Minio:Bucket"]).WithObject(fileName);
+            var result = await _minioClient.StatObjectAsync(args);
+
+        }
 
         public async Task UploadFormFileAsync(IFormFile file)
         {
@@ -42,5 +46,6 @@ namespace FileServiceApi.Service.OssFileService.Operaction
             var fileName = Path.GetFileNameWithoutExtension(fileNameWithSuffix);
             return new StringBuilder(fileName).Append('|').Append(Guid.NewGuid()).ToString();
         }
+
     }
 }

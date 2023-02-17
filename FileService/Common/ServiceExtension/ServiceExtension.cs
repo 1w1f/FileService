@@ -1,5 +1,6 @@
 using System.Text;
 using FileService.AutoMapper.Profiles;
+using FileService.Option;
 using FileService.Service.IService;
 using FileService.Service.Service.File;
 using FileServiceApi.Service.File;
@@ -20,7 +21,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace FileServiceApi.ServiceExtension;
+namespace FileService.Common.ServiceExtension;
 
 public static class ServiceExtension
 {
@@ -76,8 +77,8 @@ public static class ServiceExtension
             #endregion
 
             //配置swagger从文件中读取相关注释
-            var fileServiceFilePath = Path.Combine(System.AppContext.BaseDirectory, "FileService.xml");
-            var DataModelFilePath = Path.Combine(System.AppContext.BaseDirectory, "DataModel.xml");
+            var fileServiceFilePath = Path.Combine(AppContext.BaseDirectory, "FileService.xml");
+            var DataModelFilePath = Path.Combine(AppContext.BaseDirectory, "DataModel.xml");
             option.IncludeXmlComments(fileServiceFilePath);
             option.IncludeXmlComments(DataModelFilePath);
         });
@@ -109,10 +110,9 @@ public static class ServiceExtension
     /// <returns></returns>
     public static IServiceCollection AddJwtAuth(this IServiceCollection services, string authKey)
     {
-
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
         {
-            option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            option.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authKey)),
@@ -128,7 +128,9 @@ public static class ServiceExtension
         return services;
     }
 
-
-
-
+    public static IServiceCollection AddConfigurationType(this WebApplicationBuilder builder)
+    {
+        builder.Services.Configure<MinioSetUp>(builder.Configuration.GetSection(nameof(MinioSetUp)));
+        return builder.Services;
+    }
 }

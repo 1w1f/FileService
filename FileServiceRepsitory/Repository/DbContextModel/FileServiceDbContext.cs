@@ -19,19 +19,9 @@ public class FileServiceDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<UserDto>().HasKey(u => u.Id);
         modelBuilder.Entity<UserDto>(user =>
         {
-            user.Property(u => u.Id).HasColumnName("UserId").IsRequired();
-            user.Property(u => u.Name)
-                .HasColumnName("UserName")
-                .HasColumnType("nvarchar(20)")
-                .HasMaxLength(20);
-            user.Property(u => u.PassWord).HasColumnType("nvarchar(200)");
-            user.Property(u => u.UpdateTime)
-                .HasColumnName("UpdateTime")
-                .HasColumnType("nvarchar(50)");
-            user.HasKey(u => u.Id);
+            user.Property(u => u.Id).HasColumnName("userId");
             user.ToTable("Users");
         });
         modelBuilder.Entity<LoginRecordDto>().HasKey(u => u.Id);

@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 
-namespace FileServiceApi.Common;
+namespace FileService.Common;
 
 public static class ExceptionHandler
 {

@@ -2,7 +2,7 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace FileService.ServerExceptionHandler;
+namespace FileService.Common.ServerExceptionHandler;
 
 public static class ServerExceptionHanderExtension
 {

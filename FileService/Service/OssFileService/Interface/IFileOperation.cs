@@ -8,7 +8,7 @@ namespace FileServiceApi.Service.OssFileService.Interface
     public interface IFileOperation
     {
         Task UploadFormFileAsync(IFormFile file);
-        // Task<object> GetFileInfo(string fileName);
+        Task GetFileInfoAsync(string fileName);
         // void UploadStreamFile(Stream file);
         // void DelectFile();
     }

@@ -1,18 +1,17 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
 using DataModel.User;
 using DataModel.User.Vo;
+using FileService.Common;
 using FileService.Service.IService;
-using FileServiceApi.Common;
 using FileServiceApi.Service.Service.LoginRecord.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-namespace FileServiceApi.Controllers
+namespace FileService.Controllers
 {
     [ApiController]
     [Route("Api/[Controller]")]

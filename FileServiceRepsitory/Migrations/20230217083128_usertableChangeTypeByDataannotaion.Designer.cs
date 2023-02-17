@@ -2,6 +2,7 @@
 using FileServiceRepsitory.Repository.DbContextModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileServiceRepsitory.Migrations
 {
     [DbContext(typeof(FileServiceDbContext))]
-    partial class FileServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230217083128_usertableChangeTypeByDataannotaion")]
+    partial class usertableChangeTypeByDataannotaion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,17 +51,16 @@ namespace FileServiceRepsitory.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("userId");
+                        .HasColumnType("int");
 
                     b.Property<string>("CreateTime")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("UserName");
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("UerName");
 
                     b.Property<string>("PassWord")
                         .IsRequired()

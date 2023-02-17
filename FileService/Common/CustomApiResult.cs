@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-
-namespace FileServiceApi.Common
+namespace FileService.Common
 {
     public class CustomApiResult
     {
