@@ -6,6 +6,8 @@ using Minio.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 // Add services to the container.
 builder.Services.AddControllers(opt => opt.Filters.Add<ResultFilter>());
 
@@ -26,6 +28,8 @@ builder.Services.AddMinio(option =>
 
 
 var app = builder.Build();
+
+app.Logger.LogInformation(app.Configuration["Minio:AccessKey"]);
 
 
 if (app.Environment.IsDevelopment())

@@ -8,7 +8,7 @@
             "launchUrl": "Swagger",
             "applicationUrl": "http://192.168.50.16:5129",
             "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "wyf"
             }
         }
     }
