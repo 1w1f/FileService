@@ -39,15 +39,21 @@ public class FileController : ControllerBase
     /// 方法一：使用 asp.net core的模型绑定
     /// 缓冲方案上传文件 适用于小文件上传场景(该方案占用服务器内存)
     /// </summary>
-    /// <param name="formFiles">表单文件</param>
-    /// <param name="fileOperation"></param>
+    /// <param name="formFiles"></param>
     /// <returns></returns>
     [HttpPost("SaveFile")]
     [DisableRequestSizeLimit]
-    public async Task<ActionResult> SaveFileAsync([FromForm] IFormFile formFiles, [FromServices] IFileOperation fileOperation)
+    public async Task<ActionResult> SaveFileAsync(IFormFile formFiles, [FromServices] IFileStoreService fileStoreService)
     {
-        await fileOperation.UploadFormFileAsync(formFiles);
-        return Ok();
+        var fileInfo = await fileStoreService.SaveFileToOssServiceAsync(formFiles);
+        if (fileInfo is not null)
+        {
+            return Ok(fileInfo);
+        }
+        else
+        {
+            return StatusCode(500, "服务器错误");
+        }
     }
 
 

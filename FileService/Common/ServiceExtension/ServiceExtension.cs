@@ -124,7 +124,6 @@ public static class ServiceExtension
                 ClockSkew = TimeSpan.FromMinutes(60),
             };
         });
-
         return services;
     }
 

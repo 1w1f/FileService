@@ -4,7 +4,6 @@ namespace DataModel.File;
 
 public class FileModel : ModelId
 {
-
     public int UserId { get; set; }
     public DateTime CreateTime { get; set; }
     public bool IsDelete { get; set; }
