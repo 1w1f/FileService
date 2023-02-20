@@ -10,19 +10,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(opt => opt.Filters.Add<ResultFilter>());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.AddConfigurationType();
 builder.Services.AddCustomService();
 builder.Services.AddJwtAuth(builder.Configuration["AuthKey"]);
 builder.Services.AddDbContext(builder.Configuration["sqlCon"]);
 builder.Services.AddMinio(option =>
 {
     var minioSetUp = new MinioSetUp();
-    builder.Configuration.Bind(nameof(minioSetUp), minioSetUp);
+    builder.Configuration.Bind(nameof(MinioSetUp), minioSetUp);
     option.AccessKey = minioSetUp.AccessKey;
     option.SecretKey = minioSetUp.SecretKey;
     option.Endpoint = minioSetUp.EndPoint;
 });
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("home"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();

@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using DataModel.File;
+using FileService.Option;
 using FileServiceApi.Service.OssFileService.Interface;
 using Microsoft.Extensions.Options;
 using Minio;
+
 
 namespace FileServiceApi.Service.OssFileService.Operaction
 {
@@ -14,29 +12,33 @@ namespace FileServiceApi.Service.OssFileService.Operaction
     {
 
         private readonly MinioClient _minioClient;
-        private readonly IConfiguration _configuration;
+        private readonly IOptions<MinioSetUp> _minioOption;
+        private readonly ILogger<MinioOperation> _logger;
 
-        public MinioOperation(MinioClient minioClient, IConfiguration configuration)
+        public MinioOperation(MinioClient minioClient, IOptions<MinioSetUp> option, ILogger<MinioOperation> logger)
         {
             _minioClient = minioClient;
-            _configuration = configuration;
+            _minioOption = option;
+            _logger = logger;
         }
 
 
 
-        public async Task GetFileInfoAsync(string fileName)
+        public async Task<OssFileInfo> GetFileInfoAsync(string fileName)
         {
-            var args = new StatObjectArgs().WithBucket(_configuration["Minio:Bucket"]).WithObject(fileName);
+            var args = new StatObjectArgs().WithBucket(_minioOption.Value.Bucket).WithObject(fileName);
             var result = await _minioClient.StatObjectAsync(args);
-
+            return new OssFileInfo(result.ObjectName, result.Size, result.LastModified);
         }
 
-        public async Task UploadFormFileAsync(IFormFile file)
+        public async Task<string> UploadFormFileAsync(IFormFile file)
         {
             var fileNameWithSuffix = file.FileName;
             using var Stream = file.OpenReadStream();
-            var putArgs = new PutObjectArgs().WithBucket(_configuration["Minio:Bucket"]).WithObject(GenerateFileName(fileNameWithSuffix)).WithStreamData(Stream).WithObjectSize(Stream.Length);
+            var newName = GenerateFileName(fileNameWithSuffix);
+            var putArgs = new PutObjectArgs().WithBucket(_minioOption.Value.Bucket).WithObject(newName).WithStreamData(Stream).WithObjectSize(Stream.Length);
             await _minioClient.PutObjectAsync(putArgs);
+            return newName;
         }
 
 

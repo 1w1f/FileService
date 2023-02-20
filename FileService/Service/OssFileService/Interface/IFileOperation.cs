@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataModel.File;
 
 namespace FileServiceApi.Service.OssFileService.Interface
 {
     public interface IFileOperation
     {
-        Task UploadFormFileAsync(IFormFile file);
-        Task GetFileInfoAsync(string fileName);
+        Task<string> UploadFormFileAsync(IFormFile file);
+        Task<OssFileInfo> GetFileInfoAsync(string fileName);
         // void UploadStreamFile(Stream file);
         // void DelectFile();
     }
