@@ -22,13 +22,11 @@ namespace FileServiceApi.Service.OssFileService.Operaction
             _logger = logger;
         }
 
-
-
         public async Task<OssFileInfo> GetFileInfoAsync(string fileName)
         {
             var args = new StatObjectArgs().WithBucket(_minioOption.Value.Bucket).WithObject(fileName);
             var result = await _minioClient.StatObjectAsync(args);
-            return new OssFileInfo(result.ObjectName, result.Size, result.LastModified);
+            return new OssFileInfo(_minioOption.Value.Bucket, result.ObjectName, result.Size, result.LastModified);
         }
 
         public async Task<string> UploadFormFileAsync(IFormFile file)
@@ -46,8 +44,7 @@ namespace FileServiceApi.Service.OssFileService.Operaction
         private static string GenerateFileName(string fileNameWithSuffix)
         {
             var fileName = Path.GetFileNameWithoutExtension(fileNameWithSuffix);
-            return new StringBuilder(fileName).Append('|').Append(Guid.NewGuid()).ToString();
+            return new StringBuilder(Guid.NewGuid().ToString()).Append('|').Append(fileName).ToString();
         }
-
     }
 }

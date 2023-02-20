@@ -88,7 +88,7 @@ namespace FileService.Controllers
             var user = await UserService.FindByUserNameAndPassWord(userDto);
             if (user != null)
             {
-                await LoginRecordService.CreateAsync(new LoginRecordDto(clientIp, DateTime.Now, user.Id));
+                // await LoginRecordService.CreateAsync(new LoginRecordDto(clientIp, DateTime.Now, user.Id));
 
 
                 var claims = new Claim[]

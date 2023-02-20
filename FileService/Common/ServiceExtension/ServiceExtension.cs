@@ -95,6 +95,7 @@ public static class ServiceExtension
             option =>
             {
                 option.UseMySql(dbConnectionString, new MySqlServerVersion(new Version(8, 0, 27)), x => x.MigrationsAssembly("FileServiceRepsitory"));
+                // 替换服务 不生成外键
                 option.ReplaceService<IMigrationsModelDiffer, MigrationWithOutForegnKey>();
             }
         );
