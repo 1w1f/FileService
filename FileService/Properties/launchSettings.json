@@ -9,7 +9,7 @@
             "applicationUrl": "http://192.168.50.16:5129",
             "environmentVariables": {
                 // Development home stable production
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "home"
             }
         }
     }

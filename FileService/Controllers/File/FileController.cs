@@ -1,6 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+using DataModel.File;
 using FileServiceApi.Service.File;
 using FileServiceApi.Service.OssFileService.Interface;
-using FileServiceApi.Service.OssFileService.Operaction;
+using FileServiceRepsitory.Repository.File;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 
@@ -10,22 +12,12 @@ namespace FileService.Controllers;
 [ApiController]
 public class FileController : ControllerBase
 {
-
     protected IFileStoreService _fileService;
     private ILogger<FileController> _logger;
     public FileController(IFileStoreService fileService, ILogger<FileController> logger)
     {
         _fileService = fileService;
         _logger = logger;
-    }
-
-
-    [HttpGet(nameof(Hello))]
-    public IActionResult Hello()
-    {
-
-        // throw new BusinessException(5001, "业务异常");
-        return Ok();
     }
 
     [HttpGet("GetFileInfo")]
@@ -43,11 +35,13 @@ public class FileController : ControllerBase
     /// <returns></returns>
     [HttpPost("SaveFile")]
     [DisableRequestSizeLimit]
-    public async Task<ActionResult> SaveFileAsync(IFormFile formFiles, [FromServices] IFileStoreService fileStoreService)
+    public async Task<ActionResult> SaveFileAsync(IFormFile formFiles, [FromServices] IFileStoreService fileStoreService, [FromServices] IFileRepository fileRepository)
     {
         var fileInfo = await fileStoreService.SaveFileToOssServiceAsync(formFiles);
+        var fileEntity = new FileEntity(formFiles.FileName, fileInfo.FileName, DateTime.Now, "/" + fileInfo.Bucket + "/" + fileInfo.FileName, fileInfo.FileSize);
         if (fileInfo is not null)
         {
+            await fileRepository.CreateAsync(fileEntity);
             return Ok(fileInfo);
         }
         else
@@ -55,6 +49,7 @@ public class FileController : ControllerBase
             return StatusCode(500, "服务器错误");
         }
     }
+
 
 
     [HttpPost(nameof(SaveFilesStream))]
@@ -76,5 +71,23 @@ public class FileController : ControllerBase
         return BadRequest("No files data in the request.");
     }
 
+    public class SizeRange
+    {
+        [Required]
+        public int Min { get; set; }
+        public int Max { get; set; }
 
+        [Required]
+        public string name { get; set; }
+    }
+
+
+
+    [HttpPost(nameof(GetFileWithRangeSize))]
+    public async Task<IActionResult> GetFileWithRangeSize([FromServices] IFileRepository fileRepository, SizeRange sizeRange)
+    {
+        var files = await fileRepository.FindAllAsync();
+        var list = files.Where(item => item.FileSize > sizeRange.Min && item.FileSize < sizeRange.Max).ToList();
+        return Ok();
+    }
 }

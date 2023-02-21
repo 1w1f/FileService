@@ -7,7 +7,7 @@ using Minio.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
-builder.Services.AddControllers(opt => opt.Filters.Add<ResultFilter>());
+builder.Services.AddControllers(opt => { opt.Filters.Add<ResultFilter>(); });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.AddConfigurationType();
