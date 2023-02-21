@@ -3,6 +3,7 @@ using System;
 using FileServiceRepsitory.Repository.DbContextModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,39 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileServiceRepsitory.Migrations
 {
     [DbContext(typeof(FileServiceDbContext))]
-    partial class FileServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230221024849_updateColumnLoginIpNvcharToVarchar")]
+    partial class updateColumnLoginIpNvcharToVarchar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("DataModel.File.FileEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasColumnName("FileId");
-
-                    b.Property<string>("CreateTime")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<long>("FileSize")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("SavaPath")
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FileEntitys");
-                });
 
             modelBuilder.Entity("DataModel.User.LoginRecordDto", b =>
                 {
@@ -51,17 +28,13 @@ namespace FileServiceRepsitory.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("LoginRecordId");
 
-                    b.Property<string>("LoginIp")
-                        .HasColumnType("varchar(20)")
-                        .HasColumnName("LoginIp");
-
-                    b.Property<string>("LoginTime")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("LoginTime");
-
                     b.Property<Guid?>("UserId")
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("_loginTime")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("LoginIp");
 
                     b.HasKey("Id");
 

@@ -12,6 +12,7 @@ using FileServiceApi.Service.Service.LoginRecord.IService;
 using FileServiceRepsitory.IRepository;
 using FileServiceRepsitory.Repository;
 using FileServiceRepsitory.Repository.DbContextModel;
+using FileServiceRepsitory.Repository.File;
 using FileServiceRepsitory.Repository.LoginRecord;
 using FileServiceRepsitory.Repository.LoginRecord.IRepository;
 using FileServiceRepsitory.Repository.User;
@@ -32,7 +33,7 @@ public static class ServiceExtension
         services.AddScoped<ILoginRecordService, LoginRecordService>();
         services.AddScoped<ILoginRecordRepository, LoginRecordRepository>();
         services.AddScoped<IFileStoreService, FileStoreService>();
-
+        services.AddScoped<IFileRepository, FileRepository>();
 
         services.AddScoped<IFileOperation, MinioOperation>();
 

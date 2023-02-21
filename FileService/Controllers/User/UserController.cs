@@ -15,8 +15,8 @@ namespace FileService.Controllers
 {
     [ApiController]
     [Route("Api/[Controller]")]
-    [Produces("application/json")]
     [Authorize]
+    [Produces("application/json")]
     public class UserController : ControllerBase
     {
         protected IUserService UserService { get; set; }
@@ -43,14 +43,16 @@ namespace FileService.Controllers
         /// <param name="vo">uservo</param>
         /// <returns></returns>
         [HttpPost("Create")]
-        public async Task<ActionResult<UserVo>> CreateUser([FromBody] UserWithPassWordVo vo)
+        [AllowAnonymous]
+        public async Task<ActionResult<UserVo>> CreateUser([FromBody] UserAccount vo)
         {
             if (string.IsNullOrEmpty(vo.Name) || string.IsNullOrEmpty(vo.PassWord))
             {
                 throw new BusinessException(4001, "用户名或密码不能为空");
             }
-            var user = Mapper.Map<UserVo, UserDto>(vo);
-            user.CreateTime = new DateTime();
+            var user = Mapper.Map<UserAccount, UserDto>(vo);
+            user.CreateTime = DateTime.Now;
+            user.UpdateTime = DateTime.Now;
             var result = await UserService.CreateAsync(user);
             if (result != null)
             {
@@ -88,7 +90,7 @@ namespace FileService.Controllers
             var user = await UserService.FindByUserNameAndPassWord(userDto);
             if (user != null)
             {
-                // await LoginRecordService.CreateAsync(new LoginRecordDto(clientIp, DateTime.Now, user.Id));
+                await LoginRecordService.CreateAsync(new LoginRecordDto(clientIp, DateTime.Now, user));
 
 
                 var claims = new Claim[]
@@ -108,7 +110,7 @@ namespace FileService.Controllers
                 var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
 
                 user.Token = jwtToken;
-                user.ExpirationTime = DateTime.Now.AddHours(1).ToString("yyyy-mm-dd HH-mm-ss");
+                user.ExpirationTime = DateTime.Now.AddHours(1).ToString("yyyy-MM-dd HH-mm-ss");
 
 
                 UserVoWithToken userVoWithToken = Mapper.Map<UserVoWithToken>(user);
@@ -127,7 +129,7 @@ namespace FileService.Controllers
 
 
         /// <summary>
-        /// 
+        /// 更新用户的
         /// </summary>
         /// <returns></returns>
         [HttpPost("UpdateNameAndPassWord")]

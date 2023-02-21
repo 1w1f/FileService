@@ -1,6 +1,6 @@
 using DataModel;
 
-namespace FileServiceRepsitory.IRepository;
+namespace FileServiceRepsitory.Repository.Base;
 
 public interface IBaseRepository<T> where T : ModelId
 {

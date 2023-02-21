@@ -1,8 +1,8 @@
 using DataModel.User;
-using FileServiceRepsitory.IRepository;
+using FileServiceRepsitory.Repository.Base;
 
 namespace FileServiceRepsitory.Repository.LoginRecord.IRepository;
 
-public interface ILoginRecordRepository:IBaseRepository<LoginRecordDto>
+public interface ILoginRecordRepository : IBaseRepository<LoginRecordDto>
 {
 }

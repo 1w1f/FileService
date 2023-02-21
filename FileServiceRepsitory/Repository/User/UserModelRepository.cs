@@ -1,7 +1,6 @@
-using DataModel;
 using DataModel.User;
-using DataModel.User.Vo;
 using FileServiceRepsitory.IRepository;
+using FileServiceRepsitory.Repository.Base;
 using FileServiceRepsitory.Repository.DbContextModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,14 +23,14 @@ namespace FileServiceRepsitory.Repository.User
 
 
         /// <summary>
-        /// 根据用户名密码非跟踪查询
+        /// 根据用户名密码
         /// </summary>
         /// <param name="userDto"></param>
         /// <returns></returns>
         public async Task<UserDto> FindUserByUserNameAndPassWord(UserDto
         userDto)
         {
-            var dtos = await DbContext.Users.AsNoTracking().Where(user => user.Name == userDto.Name && user.PassWord == userDto.PassWord).ToListAsync();
+            var dtos = await DbContext.Users.Where(user => user.Name == userDto.Name && user.PassWord == userDto.PassWord).ToListAsync();
             return dtos.FirstOrDefault();
         }
 

@@ -3,13 +3,17 @@ namespace DataModel.User;
 public class LoginRecordDto : ModelId
 {
     public UserDto User { get; set; }
-    public DateTime _loginTime;
-    public string LoginTime => _loginTime.ToString("yyyy/MM/dd HH:mm:ss");
-    private IPAddress _loginIp;
-    public string LoginIp => _loginIp.ToString();
+    public DateTime LoginTime { get; set; }
+    public IPAddress LoginIp { get; set; }
 
     public LoginRecordDto()
     {
 
+    }
+    public LoginRecordDto(IPAddress loginIp, DateTime loginTime, UserDto user)
+    {
+        LoginIp = loginIp;
+        LoginTime = loginTime;
+        User = user;
     }
 }

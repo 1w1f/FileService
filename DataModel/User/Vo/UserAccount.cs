@@ -7,7 +7,7 @@ namespace DataModel.User.Vo
 {
     public class UserAccount
     {
-        public string UserName { get; set; }
+        public string Name { get; set; }
         public string PassWord { get; set; }
     }
 }
