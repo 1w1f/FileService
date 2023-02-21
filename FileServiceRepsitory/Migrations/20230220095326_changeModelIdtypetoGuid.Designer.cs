@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileServiceRepsitory.Migrations
 {
     [DbContext(typeof(FileServiceDbContext))]
-    [Migration("20220727135214_updateloginrecordlogintimelength")]
-    partial class updateloginrecordlogintimelength
+    [Migration("20230220095326_changeModelIdtypetoGuid")]
+    partial class changeModelIdtypetoGuid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,23 +23,18 @@ namespace FileServiceRepsitory.Migrations
 
             modelBuilder.Entity("DataModel.User.LoginRecordDto", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("char(36)")
                         .HasColumnName("LoginRecordId");
 
-                    b.Property<string>("LoginIp")
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("_loginTime")
+                        .IsRequired()
                         .HasColumnType("nvarchar(20)")
                         .HasColumnName("LoginIp");
-
-                    b.Property<string>("LoginTime")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("LoginTime");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("UserId");
 
                     b.HasKey("Id");
 
@@ -50,13 +45,14 @@ namespace FileServiceRepsitory.Migrations
 
             modelBuilder.Entity("DataModel.User.UserDto", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("char(36)")
                         .HasColumnName("UserId");
 
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("CreateTime")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(20)
@@ -64,12 +60,13 @@ namespace FileServiceRepsitory.Migrations
                         .HasColumnName("UserName");
 
                     b.Property<string>("PassWord")
-                        .HasColumnType("nvarchar(200)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("UpdateTime")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("UpdateTime");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -78,11 +75,11 @@ namespace FileServiceRepsitory.Migrations
 
             modelBuilder.Entity("DataModel.User.LoginRecordDto", b =>
                 {
-                    b.HasOne("DataModel.User.UserDto", null)
+                    b.HasOne("DataModel.User.UserDto", "User")
                         .WithMany("LoginRecords")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DataModel.User.UserDto", b =>

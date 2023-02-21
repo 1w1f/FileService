@@ -22,7 +22,7 @@ namespace FileServiceRepsitory.Repository
             return result.Entity;
         }
 
-        public Task<bool> Delete(int id)
+        public Task<bool> Delete(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -37,7 +37,7 @@ namespace FileServiceRepsitory.Repository
             return await DbContext.Set<T>().ToListAsync();
         }
 
-        public async Task<T> FindByIdAsync(int id)
+        public async Task<T> FindByIdAsync(Guid id)
         {
             var result = await DbContext.Set<T>().Where(item => item.Id == id).ToListAsync();
             return result.FirstOrDefault();

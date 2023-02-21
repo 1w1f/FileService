@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace FileServiceRepsitory.Migrations
 {
-    public partial class adduserupdatetime2removeforgionkey2 : Migration
+    public partial class changeModelIdtypetoint : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,8 +19,10 @@ namespace FileServiceRepsitory.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    PassWord = table.Column<string>(type: "nvarchar(200)", nullable: true),
-                    CreateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    PassWord = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreateTime = table.Column<string>(type: "varchar(50)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     UpdateTime = table.Column<string>(type: "nvarchar(50)", nullable: false)
                 },
                 constraints: table =>
@@ -36,26 +37,19 @@ namespace FileServiceRepsitory.Migrations
                 {
                     LoginRecordId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    LoginTime = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    LoginIp = table.Column<string>(type: "nvarchar(20)", nullable: true),
-                    UserDtoId = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    LoginIp = table.Column<string>(type: "nvarchar(20)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LoginRecords", x => x.LoginRecordId);
-                    table.ForeignKey(
-                        name: "FK_LoginRecords_Users_UserDtoId",
-                        column: x => x.UserDtoId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LoginRecords_UserDtoId",
+                name: "IX_LoginRecords_UserId",
                 table: "LoginRecords",
-                column: "UserDtoId");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

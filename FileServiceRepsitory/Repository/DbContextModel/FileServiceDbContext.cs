@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using DataModel.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +20,7 @@ public class FileServiceDbContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<UserDto>(user =>
         {
-            user.Property(u => u.Id).HasColumnName("userId");
+            user.Property(u => u.Id).HasColumnName("UserId");
             user.ToTable("Users");
         });
         modelBuilder.Entity<LoginRecordDto>().HasKey(u => u.Id);
@@ -29,26 +28,15 @@ public class FileServiceDbContext : DbContext
         {
             loginRecord
                 .Property(r => r.Id)
-                .HasColumnName("LoginRecordId")
-                .HasColumnType("int")
-                .IsRequired();
+                .HasColumnName("LoginRecordId");
             loginRecord
-                .Property(r => r.LoginTime)
+                .Property(r => r._loginTime)
                 .HasColumnName("LoginTime")
-                .HasColumnType("nvarchar(50)")
-                .HasMaxLength(50);
+                .HasColumnType("nvarchar(50)");
             loginRecord
-                .Property(r => r.LoginIp)
+                .Property(r => r._loginTime)
                 .HasColumnName("LoginIp")
                 .HasColumnType("nvarchar(20)");
-            loginRecord.Property(r => r.UserId).HasColumnName("UserId").HasColumnType("int");
         });
-        #region 一对多
-        modelBuilder
-            .Entity<UserDto>()
-            .HasMany(u => u.LoginRecords)
-            .WithOne()
-            .HasForeignKey(r => r.UserId);
-        #endregion
     }
 }
