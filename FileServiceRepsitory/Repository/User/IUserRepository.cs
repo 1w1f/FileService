@@ -1,5 +1,6 @@
 using DataModel;
 using DataModel.User;
+using FileServiceRepsitory.Repository.Base;
 
 namespace FileServiceRepsitory.IRepository;
 

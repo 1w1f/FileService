@@ -9,16 +9,19 @@ public class UserProfile : Profile
 
     public UserProfile()
     {
-        CreateMap<UserDto, UserVo>().ForMember(des => des.Name, option => option.MapFrom(Dto => Dto.Name)).ForMember(des => des.Id, option => option.MapFrom(source => source.Id));
+        CreateMap<UserVo, UserDto>();
+        // .ForMember(des => des.Name, option => option.MapFrom(vo => vo.Name));
+        CreateMap<UserDto, UserVo>();
+        // .ForMember(des => des.Name, option => option.MapFrom(Dto => Dto.Name)).ForMember(des => des.Id, option => option.MapFrom(source => source.Id));
 
-        CreateMap<UserWithPassWordVo, UserDto>().ForMember(des => des.Name, option => option.MapFrom(source => source.Name)).ForMember(des => des.PassWord, option => option.MapFrom(source => source.PassWord));
+        CreateMap<UserWithPassWordVo, UserDto>();
+        // .ForMember(des => des.Name, option => option.MapFrom(source => source.Name)).ForMember(des => des.PassWord, option => option.MapFrom(source => source.PassWord));
 
 
         CreateMap<UserDto, UserVoWithToken>();
 
 
-        CreateMap<UserVo, UserDto>().ForMember(des => des.Name, option => option.MapFrom(vo => vo.Name));
-
+        CreateMap<UserAccount, UserDto>();
 
     }
 }

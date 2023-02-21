@@ -1,5 +1,5 @@
 using DataModel;
-using FileServiceRepsitory.IRepository;
+using FileServiceRepsitory.Repository.Base;
 
 namespace FileService.Service.BaseService;
 
