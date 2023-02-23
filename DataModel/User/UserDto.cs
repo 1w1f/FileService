@@ -4,11 +4,18 @@ namespace DataModel.User;
 public class UserDto : ModelId
 {
     [Column(name: "UserName", TypeName = "nvarchar(50)")]
-    [StringLength(20)]
     public string Name { get; set; }
+
     [Required]
     [StringLength(100)]
     public string PassWord { get; set; }
+
+    /// <summary>
+    /// 用户类型
+    /// </summary>
+    /// <value></value>
+    [StringLength(20)]
+    public UserTypeEnum UserType { get; set; }
 
     [Column(TypeName = "varchar(50)")]
     public DateTime CreateTime { get; set; }
