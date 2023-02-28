@@ -77,21 +77,20 @@ namespace FileService.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("Login/{Name}/{passWord}")]
-        public async Task<ActionResult<UserVoWithToken>> Login(string Name, string passWord)
+        [HttpPost("Login")]
+        public async Task<ActionResult<UserVoWithToken>> Login([FromBody] UserAccount userAccount)
         {
             var clientIp = HttpContext.Connection.RemoteIpAddress;
             _logger.LogInformation($"clientIP:{clientIp}");
             var userDto = new UserDto
             {
-                Name = Name,
-                PassWord = passWord
+                Name = userAccount.Name,
+                PassWord = userAccount.PassWord
             };
             var user = await UserService.FindByUserNameAndPassWord(userDto);
             if (user != null)
             {
                 await LoginRecordService.CreateAsync(new LoginRecordDto(clientIp, DateTime.Now, user));
-
 
                 var claims = new Claim[]
                {
@@ -118,8 +117,7 @@ namespace FileService.Controllers
             }
             else
             {
-                return Ok(new { code = 100, mesage = "222" });
-                throw new BusinessException(4011, "用户名密码登录失败");
+                return Ok(new { code = 4011, mesage = "用户名密码登录失败" });
             }
         }
 
