@@ -12,6 +12,6 @@ public interface IBaseRepository<T> where T : ModelId
 
     Task<bool> Delete(Guid id);
 
-    Task<bool> Edit(T t);
+    Task<bool> Update(T t);
 
 }

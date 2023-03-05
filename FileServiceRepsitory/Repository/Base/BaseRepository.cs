@@ -21,14 +21,28 @@ public class BaseRepository<T, TDbContext> : IBaseRepository<T>
         return result.Entity;
     }
 
-    public Task<bool> Delete(Guid id)
+    public async Task<bool> Delete(Guid id)
     {
-        throw new NotImplementedException();
+        var result = await DbContext.Set<T>().FirstOrDefaultAsync(item => item.Id == id);
+        if (result != default)
+        {
+            DbContext.Remove(result);
+            if (DbContext.SaveChanges() > 0)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public Task<bool> Edit(T t)
+    public async Task<bool> Update(T t)
     {
-        throw new NotImplementedException();
+        DbContext.Update(t);
+        if (await DbContext.SaveChangesAsync() > 0)
+        {
+            return true;
+        }
+        return false;
     }
 
     public async virtual Task<List<T>> FindAllAsync()
