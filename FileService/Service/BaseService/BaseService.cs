@@ -3,11 +3,11 @@ using FileServiceRepsitory.Repository.Base;
 
 namespace FileService.Service.BaseService;
 
-public class BaseService<T, T1> : IBaseService<T, T1> where T : ModelId where T1 : IBaseRepository<T>
+public class BaseService<T, TRepostitory> : IBaseService<T, TRepostitory> where T : ModelId where TRepostitory : IBaseRepository<T>
 {
-    protected T1 Repository { get; set; }
+    public TRepostitory Repository { get; protected set; }
 
-    public BaseService(T1 repository)
+    public BaseService(TRepostitory repository)
     {
         Repository = repository;
     }
@@ -16,14 +16,14 @@ public class BaseService<T, T1> : IBaseService<T, T1> where T : ModelId where T1
         return Repository.CreateAsync(t);
     }
 
-    public Task<bool> DeleteAsync(int id)
+    public Task<bool> DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return Repository.Delete(id);
     }
 
-    public virtual Task<bool> EditAsync(T t)
+    public virtual Task<bool> UpdateAsync(T t)
     {
-        throw new NotImplementedException();
+        return Repository.Update(t);
     }
 
     public virtual Task<List<T>> FindAllAsync()
@@ -31,8 +31,8 @@ public class BaseService<T, T1> : IBaseService<T, T1> where T : ModelId where T1
         return Repository.FindAllAsync();
     }
 
-    public Task<T> FindByIdAsync(int id)
+    public Task<T> FindByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return Repository.FindByIdAsync(id);
     }
 }

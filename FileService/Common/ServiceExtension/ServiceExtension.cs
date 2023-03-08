@@ -29,12 +29,11 @@ public static class ServiceExtension
     public static IServiceCollection AddCustomService(this IServiceCollection services)
     {
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IUserRepository, UserModelRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ILoginRecordService, LoginRecordService>();
         services.AddScoped<ILoginRecordRepository, LoginRecordRepository>();
         services.AddScoped<IFileStoreService, FileStoreService>();
         services.AddScoped<IFileRepository, FileRepository>();
-
         services.AddScoped<IFileOperation, MinioOperation>();
 
 
@@ -42,7 +41,6 @@ public static class ServiceExtension
         #region AutoMapperDI
         services.AddAutoMapper(typeof(UserProfile));
         #endregion
-
 
         #region configure Swagger
 
