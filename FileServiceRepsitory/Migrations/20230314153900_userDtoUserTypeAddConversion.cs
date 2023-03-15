@@ -1,0 +1,37 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace FileServiceRepsitory.Migrations
+{
+    public partial class userDtoUserTypeAddConversion : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AlterColumn<string>(
+                name: "UserType",
+                table: "Users",
+                type: "varchar(20)",
+                maxLength: 20,
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldMaxLength: 20)
+                .Annotation("MySql:CharSet", "utf8mb4");
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AlterColumn<int>(
+                name: "UserType",
+                table: "Users",
+                type: "int",
+                maxLength: 20,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "varchar(20)",
+                oldMaxLength: 20)
+                .OldAnnotation("MySql:CharSet", "utf8mb4");
+        }
+    }
+}

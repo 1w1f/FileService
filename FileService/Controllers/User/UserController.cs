@@ -96,7 +96,6 @@ namespace FileService.Controllers
                {
                     new Claim(ClaimTypes.Name,user.Name),
                     new Claim("UserId",user.Id.ToString()),
-                    new Claim("test",user.Name),
                };
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthKey"]));
                 var token = new JwtSecurityToken(
@@ -159,7 +158,7 @@ namespace FileService.Controllers
             }
             else
             {
-                return Ok();
+                return Ok(result);
             }
         }
     }

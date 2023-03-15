@@ -23,7 +23,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("home"))
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(option =>
+    {
+        option.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        option.RoutePrefix = string.Empty;
+    });
 }
 // 使用框架内部的异常中间件处理异常 代替自定义中间件
 app.UseExceptionHandler(builder => builder.Run(ExceptionHandler.HandlerHttpFeatureException));

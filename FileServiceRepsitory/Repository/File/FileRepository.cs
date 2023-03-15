@@ -9,7 +9,7 @@ using FileServiceRepsitory.Repository.DbContextModel;
 
 namespace FileServiceRepsitory.Repository.File
 {
-    public class FileRepository : BaseRepository<FileEntity, FileServiceDbContext>, IFileRepository
+    public class FileRepository : BaseRepository<FileEntity>, IFileRepository
     {
         public FileRepository(FileServiceDbContext dbContext) : base(dbContext)
         {

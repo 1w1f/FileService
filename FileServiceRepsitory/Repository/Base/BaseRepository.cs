@@ -1,15 +1,15 @@
 using DataModel;
+using FileServiceRepsitory.Repository.DbContextModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace FileServiceRepsitory.Repository.Base;
 
-public class BaseRepository<T, TDbContext> : IBaseRepository<T>
+public class BaseRepository<T> : IBaseRepository<T>
     where T : ModelId
-    where TDbContext : DbContext
 {
-    protected TDbContext DbContext { get; set; }
+    protected FileServiceDbContext DbContext { get; set; }
 
-    public BaseRepository(TDbContext dbContext)
+    public BaseRepository(FileServiceDbContext dbContext)
     {
         DbContext = dbContext;
     }

@@ -28,6 +28,7 @@ public class FileServiceDbContext : DbContext
             user.Property(u => u.Id).HasColumnName("UserId");
             user.Property(u => u.CreateTime).HasConversion(clr => clr.ToString("yyyy/MM/dd HH:mm:ss"), database => Convert.ToDateTime(database));
             user.Property(u => u.UpdateTime).HasConversion(clr => clr.ToString("yyyy/MM/dd HH:mm:ss"), database => Convert.ToDateTime(database));
+            user.Property(u => u.UserType).HasConversion(clr => clr.ToString(), database => Enum.Parse<UserTypeEnum>(database));
         });
         // Table:LoginRecords
         modelBuilder.Entity<LoginRecordDto>().HasKey(u => u.Id);

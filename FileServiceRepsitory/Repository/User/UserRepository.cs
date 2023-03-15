@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FileServiceRepsitory.Repository.User
 {
-    public class UserModelRepository : BaseRepository<UserDto, FileServiceDbContext>, IUserRepository
+    public class UserRepository : BaseRepository<UserDto>, IUserRepository
     {
-        public UserModelRepository(FileServiceDbContext dbContext) : base(dbContext)
+        public UserRepository(FileServiceDbContext dbContext) : base(dbContext)
         {
         }
 
